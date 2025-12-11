@@ -42,6 +42,8 @@ body {
   width: 150px; /* Defina um tamanho fixo */
   height: 150px; /* Defina um tamanho fixo (deve ser igual à largura) */
   border-radius: 50%;
+  transform: scale(1.20); /* 15% maior */
+  transform-origin: center; /* mantém o zoom centralizado */
 }
 h1 {
   margin: 8px 0;
@@ -204,3 +206,4 @@ h1 {
 .footer-instagram:hover {
   text-decoration: underline;
 }
+
