@@ -1,53 +1,171 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Traslado Aeroporto → Gramado/Canela</title>
-<style>
-body{font-family:Arial;background:#f6f6f6;margin:0;padding:0}
-.container{max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:10px;margin-top:40px;box-shadow:0 0 10px rgba(0,0,0,0.1)}
-h1{text-align:center}
-label{font-weight:bold;margin-top:10px;display:block}
-input,select{width:100%;padding:10px;margin-top:5px;border-radius:6px;border:1px solid #ccc}
-button{width:100%;padding:12px;margin-top:15px;font-size:16px;border:none;border-radius:6px;background:#28a745;color:#fff;cursor:pointer}
-.whatsapp-btn{background:#25d366;margin-top:10px}
-</style>
-</head>
-<body>
-<div class="container">
-<h1>Reserve seu Traslado</h1>
-<form action="mailto:igor_flavio12@hotmail.com" method="POST" enctype="text/plain">
-<label>Nome Completo</label>
-<input type="text" name="nome" required>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Meu Executivo Gramado — Transfers e Passeios</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-inner">
+        <img src="/LOGO.png" alt="Meu Executivo Gramado" class="logo" />
+        <h1>Transfers e Passeios Exclusivos na Serra Gaúcha</h1>
+        <p class="subtitle">
+          Conforto, segurança e pontualidade em cada momento da sua viagem.
+        </p>
+        <div class="hero-ctas">
+          <a
+            class="btn btn-primary"
+            href="https://wa.me/SEUNUMEROCOMPAIS?text=Ol%C3%A1%2C+gostaria+de+informa%C3%A7%C3%B5es+sobre+transfers+e+passeios"
+            target="_blank"
+            id="whatsappTop"
+            >Falar no WhatsApp</a
+          >
+          <a class="btn btn-secondary" href="#form">Solicitar Orçamento</a>
+        </div>
+      </div>
+    </header>
 
-<label>Telefone</label>
-<input type="text" name="telefone" value="54 99243 6396">
+    <main class="container">
+      <section id="about" class="card">
+        <h2>Por que escolher a Meu Executivo Gramado?</h2>
+        <ul class="features">
+          <li>Pontualidade e profissionais credenciados</li>
+          <li>Veículos executivos e confortáveis</li>
+          <li>Atendimento personalizado e 24h</li>
+          <li>Roteiros premium e passeios para vinícolas</li>
+        </ul>
+      </section>
 
-<label>E-mail</label>
-<input type="email" name="email" value="igor_flavio12@hotmail.com" required>
+      <section id="gallery" class="card">
+        <h2>Principais atrações</h2>
+        <div class="gallery-grid">
+          <img src="/images/lago-negro.jpg" alt="Lago Negro" />
+          <img src="/images/rua-coberta.jpg" alt="Rua Coberta" />
+          <img src="/images/snowland.jpg" alt="Snowland" />
+          <img src="/images/catedral.jpg" alt="Catedral de Pedra" />
+          <img src="/images/vinicola.jpg" alt="Vinícola" />
+          <img src="/images/cascata.jpg" alt="Cascata do Caracol" />
+        </div>
+      </section>
 
-<label>Data do Transfer</label>
-<input type="date" name="data" required>
+      <section id="services" class="card">
+        <h2>Serviços</h2>
+        <div class="services-grid">
+          <div class="service">
+            <strong>Transfers Aeroporto</strong>
+            <p>POA ↔ Gramado/Canela</p>
+          </div>
+          <div class="service">
+            <strong>City Tours</strong>
+            <p>Passeios com guia opcional</p>
+          </div>
+          <div class="service">
+            <strong>Vinícolas</strong>
+            <p>Roteiros em Bento Gonçalves</p>
+          </div>
+          <div class="service">
+            <strong>Passeios Personalizados</strong>
+            <p>Monte seu roteiro</p>
+          </div>
+        </div>
+      </section>
 
-<label>Horário</label>
-<input type="time" name="hora" required>
+      <section id="testimonials" class="card">
+        <h2>Depoimentos</h2>
+        <blockquote>
+          “Serviço excelente, motorista pontual e veículo impecável.” — Maria S.
+        </blockquote>
+        <blockquote>
+          “Recomendo! Passeio às vinícolas perfeito.” — João P.
+        </blockquote>
+      </section>
 
-<label>Número de Passageiros</label>
-<input type="number" name="passageiros" min="1" required>
+      <section id="form" class="card form-card">
+        <h2>Solicite seu orçamento</h2>
+        <form id="leadForm">
+          <div class="form-row">
+            <input type="text" name="name" placeholder="Nome" required />
+            <input
+              type="tel"
+              name="whatsapp"
+              placeholder="WhatsApp (com DDD)"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <input
+              type="text"
+              name="origin"
+              placeholder="Local de origem"
+              required
+            />
+            <input
+              type="text"
+              name="destination"
+              placeholder="Destino"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <input type="date" name="date" placeholder="Data" required />
+            <input
+              type="number"
+              name="passengers"
+              placeholder="Número de pessoas"
+              min="1"
+              value="2"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <textarea
+              name="message"
+              placeholder="Mensagem (opcional)"
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="form-row form-actions">
+            <button type="submit" class="btn btn-primary">
+              Solicitar Orçamento
+            </button>
+            <a
+              class="btn btn-whatsapp"
+              id="whatsappForm"
+              href="#"
+              target="_blank"
+              >Enviar por WhatsApp</a
+            >
+          </div>
+          <p id="formMsg" class="form-msg"></p>
+        </form>
+        <p class="hint">
+          Se preferir, clique no botão verde para abrir uma conversa pelo
+          WhatsApp.
+        </p>
+      </section>
+    </main>
 
-<label>Destino</label>
-<select name="destino" required>
-<option value="Gramado">Gramado</option>
-<option value="Canela">Canela</option>
-</select>
+    <footer class="footer">
+      <div class="footer-inner container">
+        <img src="/LOGO.png" alt="Meu Executivo Gramado" class="logo-small" />
+        <div>
+          <p>Meu Executivo Gramado — Transfers e Passeios na Serra Gaúcha</p>
+          <p>Email: contato@seudominio.com | Tel: (XX) XXXX-XXXX</p>
+        </div>
+      </div>
+    </footer>
 
-<button type="submit">Enviar Reserva</button>
-</form>
+    <a
+      href="https://wa.me/SEUNUMEROCOMPAIS?text=Ol%C3%A1%2C+gostaria+de+informa%C3%A7%C3%B5es+sobre+transfers+e+passeios"
+      class="whatsapp-float"
+      target="_blank"
+      title="Falar no WhatsApp"
+      >WhatsApp</a
+    >
 
-<a href="https://wa.me/5554992436396" target="_blank">
-<button class="whatsapp-btn">Chamar no WhatsApp</button>
-</a>
-</div>
-</body>
+    <script src="/script.js"></script>
+  </body>
 </html>
