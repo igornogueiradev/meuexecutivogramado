@@ -39,6 +39,9 @@ body {
   height: 88px;
   display: block;
   margin: 0 auto 12px;
+  width: 150px; /* Defina um tamanho fixo */
+  height: 150px; /* Defina um tamanho fixo (deve ser igual à largura) */
+  border-radius: 50%;
 }
 h1 {
   margin: 8px 0;
@@ -179,3 +182,4 @@ h1 {
     font-size: 22px;
   }
 }
+
