@@ -32,7 +32,7 @@ form.addEventListener('submit', async (e) => {
 });
 
 function openWhatsApp(data) {
-  const phone = 'SEUNUMEROCOMPAIS';
+  const phone = '5554992436396';
   const text = encodeURIComponent(
     `Olá, meu nome é ${data.name || ''}. Gostaria de um orçamento. Origem: ${
       data.origin || ''
@@ -44,3 +44,4 @@ function openWhatsApp(data) {
   waBtn.href = url;
   window.open(url, '_blank');
 }
+
