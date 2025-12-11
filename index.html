@@ -1,49 +1,53 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Traslado POA → Gramado/Canela</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-function gerarVoucher(e){
-  e.preventDefault();
-  const nome = document.getElementById('nome').value;
-  const telefone = document.getElementById('telefone').value;
-  const email = document.getElementById('email').value;
-  const data = document.getElementById('data').value;
-  const hora = document.getElementById('hora').value;
-  const pax = document.getElementById('pax').value;
-  const destino = document.getElementById('destino').value;
-
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.text("Voucher de Traslado", 10, 10);
-  doc.text("Nome: " + nome, 10, 20);
-  doc.text("Telefone: " + telefone, 10, 30);
-  doc.text("Email: " + email, 10, 40);
-  doc.text("Data: " + data, 10, 50);
-  doc.text("Hora: " + hora, 10, 60);
-  doc.text("Passageiros: " + pax, 10, 70);
-  doc.text("Destino: " + destino, 10, 80);
-  doc.save("voucher.pdf");
-}
-</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traslado Aeroporto → Gramado/Canela</title>
+<style>
+body{font-family:Arial;background:#f6f6f6;margin:0;padding:0}
+.container{max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:10px;margin-top:40px;box-shadow:0 0 10px rgba(0,0,0,0.1)}
+h1{text-align:center}
+label{font-weight:bold;margin-top:10px;display:block}
+input,select{width:100%;padding:10px;margin-top:5px;border-radius:6px;border:1px solid #ccc}
+button{width:100%;padding:12px;margin-top:15px;font-size:16px;border:none;border-radius:6px;background:#28a745;color:#fff;cursor:pointer}
+.whatsapp-btn{background:#25d366;margin-top:10px}
+</style>
 </head>
 <body>
-<h1>Reserva de Traslado</h1>
-<form onsubmit="gerarVoucher(event)">
-  <label>Nome</label><br><input id="nome" required><br>
-  <label>Telefone</label><br><input id="telefone" value="54 99243 6396" required><br>
-  <label>Email</label><br><input id="email" value="igor_flavio12@hotmail.com"><br>
-  <label>Data</label><br><input id="data" type="date" required><br>
-  <label>Hora</label><br><input id="hora" type="time"><br>
-  <label>Passageiros</label><br><input id="pax" type="number" value="1"><br>
-  <label>Destino</label><br>
-  <select id="destino">
-    <option>Gramado</option>
-    <option>Canela</option>
-  </select><br><br>
-  <button type="submit">Gerar Voucher PDF</button>
+<div class="container">
+<h1>Reserve seu Traslado</h1>
+<form action="mailto:igor_flavio12@hotmail.com" method="POST" enctype="text/plain">
+<label>Nome Completo</label>
+<input type="text" name="nome" required>
+
+<label>Telefone</label>
+<input type="text" name="telefone" value="54 99243 6396">
+
+<label>E-mail</label>
+<input type="email" name="email" value="igor_flavio12@hotmail.com" required>
+
+<label>Data do Transfer</label>
+<input type="date" name="data" required>
+
+<label>Horário</label>
+<input type="time" name="hora" required>
+
+<label>Número de Passageiros</label>
+<input type="number" name="passageiros" min="1" required>
+
+<label>Destino</label>
+<select name="destino" required>
+<option value="Gramado">Gramado</option>
+<option value="Canela">Canela</option>
+</select>
+
+<button type="submit">Enviar Reserva</button>
 </form>
+
+<a href="https://wa.me/5554992436396" target="_blank">
+<button class="whatsapp-btn">Chamar no WhatsApp</button>
+</a>
+</div>
 </body>
 </html>
