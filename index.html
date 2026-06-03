@@ -264,45 +264,55 @@
         const mapDiv = document.createElement('div');
         const map = new google.maps.Map(mapDiv);
         const service = new google.maps.places.PlacesService(map);
+        const container = document.getElementById('google-reviews');
 
         service.findPlaceFromQuery({
-          query: 'Meu Executivo Gramado',
+          query: 'Meu Executivo Gramado Gramado RS',
           fields: ['place_id', 'name'],
         }, function(results, status) {
+          console.log('Places search status:', status);
+          console.log('Places results:', results);
+
           if (status !== google.maps.places.PlacesServiceStatus.OK || !results.length) {
-            document.getElementById('google-reviews').innerHTML = '<p class="reviews-loading">Avaliações indisponíveis no momento.</p>';
+            container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
             return;
           }
+
+          console.log('Place ID encontrado:', results[0].place_id);
 
           service.getDetails({
             placeId: results[0].place_id,
             fields: ['reviews', 'rating', 'user_ratings_total'],
           }, function(place, detailStatus) {
-            const container = document.getElementById('google-reviews');
-
-            if (detailStatus !== google.maps.places.PlacesServiceStatus.OK) {
-              container.innerHTML = '<p class="reviews-loading">Avaliações indisponíveis no momento.</p>';
-              return;
-            }
-
-            const reviews = (place.reviews || []).filter(function(r) { return r.text && r.text.length > 10; }).slice(0, 3);
-
-            if (!reviews.length) {
-              container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
-              return;
-            }
-
-            container.innerHTML = reviews.map(function(r) {
-              const stars = '⭐'.repeat(Math.min(r.rating, 5));
-              const texto = r.text.length > 220 ? r.text.substring(0, 220) + '...' : r.text;
-              return '<blockquote class="testimonial">' +
-                '<div class="stars">' + stars + '</div>' +
-                '<p>"' + texto + '"</p>' +
-                '<footer>— ' + r.author_name + '</footer>' +
-                '</blockquote>';
-            }).join('');
+            console.log('Details status:', detailStatus);
+            console.log('Reviews:', place && place.reviews);
+            renderReviews(place, detailStatus, container);
           });
         });
+      }
+
+      function renderReviews(place, status, container) {
+        if (status !== google.maps.places.PlacesServiceStatus.OK) {
+          container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
+          return;
+        }
+
+        const reviews = (place.reviews || []).filter(function(r) { return r.text && r.text.length > 5; }).slice(0, 3);
+
+        if (!reviews.length) {
+          container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
+          return;
+        }
+
+        container.innerHTML = reviews.map(function(r) {
+          const stars = '⭐'.repeat(Math.min(r.rating, 5));
+          const texto = r.text.length > 220 ? r.text.substring(0, 220) + '...' : r.text;
+          return '<blockquote class="testimonial">' +
+            '<div class="stars">' + stars + '</div>' +
+            '<p>"' + texto + '"</p>' +
+            '<footer>— ' + r.author_name + '</footer>' +
+            '</blockquote>';
+        }).join('');
       }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGGQVJ7FPzHiza9WgbHTrIof95VELmmBM&libraries=places&callback=initGoogleReviews" async defer></script>
