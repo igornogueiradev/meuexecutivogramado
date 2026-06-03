@@ -138,8 +138,22 @@
       <section id="testimonials" class="card">
         <h2>O que dizem nossos clientes</h2>
         <p class="section-sub">Avaliações reais do Google</p>
-        <div id="google-reviews" class="testimonials-grid">
-          <div class="reviews-loading">Carregando avaliações...</div>
+        <div class="testimonials-grid">
+          <blockquote class="testimonial">
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+            <p>"Excelente atendimento. Igor é muito atencioso e gentil. Deu-nos boas dicas do que fazer no passeio e até tirou nossas fotos. Super indico!"</p>
+            <footer>— Antonia Clebia Soares Lima</footer>
+          </blockquote>
+          <blockquote class="testimonial">
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+            <p>"Serviços de muita qualidade e pontualidade! O Igor pegou eu e minha família e ficou à disposição durante todo o passeio."</p>
+            <footer>— Thayna Dantas</footer>
+          </blockquote>
+          <blockquote class="testimonial">
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+            <p>"Ótimo motorista, muito educado e pontual. Recomendo a todos que precisam de transfer na Serra Gaúcha!"</p>
+            <footer>— Remilton Francisco</footer>
+          </blockquote>
         </div>
         <p class="google-note">⭐ Veja todas as avaliações no <a href="https://share.google/8B7Civudz68UEOqfz" target="_blank">Google</a></p>
       </section>
@@ -259,56 +273,5 @@
     </a>
 
     <script type="module" src="/script.js"></script>
-    <script>
-      async function initGoogleReviews() {
-        const container = document.getElementById('google-reviews');
-        try {
-          const { Place } = await google.maps.importLibrary('places');
-
-          const { places } = await Place.searchByText({
-            textQuery: 'Meu Executivo Gramado Gramado RS Brasil',
-            fields: ['id', 'displayName'],
-            maxResultCount: 1,
-          });
-
-          if (!places || !places.length) {
-            container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
-            return;
-          }
-
-          await places[0].fetchFields({ fields: ['reviews', 'rating', 'userRatingCount'] });
-
-          const reviews = (places[0].reviews || [])
-            .filter(function(r) { return r.text && r.text.text && r.text.text.length > 5; })
-            .slice(0, 3);
-
-          if (!reviews.length) {
-            container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
-            return;
-          }
-
-          container.innerHTML = reviews.map(function(r) {
-            const stars = '⭐'.repeat(Math.min(r.rating, 5));
-            const texto = r.text.text.length > 220 ? r.text.text.substring(0, 220) + '...' : r.text.text;
-            return '<blockquote class="testimonial">' +
-              '<div class="stars">' + stars + '</div>' +
-              '<p>"' + texto + '"</p>' +
-              '<footer>— ' + (r.authorAttribution ? r.authorAttribution.displayName : 'Cliente') + '</footer>' +
-              '</blockquote>';
-          }).join('');
-
-        } catch (e) {
-          console.error('Google Reviews:', e);
-          container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
-        }
-      }
-    </script>
-    <script>
-      (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;a.onerror=()=>n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a);d[l]?f():d[q]=f}));d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-        key: 'AIzaSyDGGQVJ7FPzHiza9WgbHTrIof95VELmmBM',
-        v: 'weekly',
-      });
-      window.addEventListener('load', initGoogleReviews);
-    </script>
   </body>
 </html>
