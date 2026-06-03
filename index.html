@@ -260,61 +260,55 @@
 
     <script type="module" src="/script.js"></script>
     <script>
-      function initGoogleReviews() {
-        const mapDiv = document.createElement('div');
-        const map = new google.maps.Map(mapDiv);
-        const service = new google.maps.places.PlacesService(map);
+      async function initGoogleReviews() {
         const container = document.getElementById('google-reviews');
+        try {
+          const { Place } = await google.maps.importLibrary('places');
 
-        service.findPlaceFromQuery({
-          query: 'Meu Executivo Gramado Gramado RS',
-          fields: ['place_id', 'name'],
-        }, function(results, status) {
-          console.log('Places search status:', status);
-          console.log('Places results:', results);
+          const { places } = await Place.searchByText({
+            textQuery: 'Meu Executivo Gramado Gramado RS Brasil',
+            fields: ['id', 'displayName'],
+            maxResultCount: 1,
+          });
 
-          if (status !== google.maps.places.PlacesServiceStatus.OK || !results.length) {
+          if (!places || !places.length) {
             container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
             return;
           }
 
-          console.log('Place ID encontrado:', results[0].place_id);
+          await places[0].fetchFields({ fields: ['reviews', 'rating', 'userRatingCount'] });
 
-          service.getDetails({
-            placeId: results[0].place_id,
-            fields: ['reviews', 'rating', 'user_ratings_total'],
-          }, function(place, detailStatus) {
-            console.log('Details status:', detailStatus);
-            console.log('Reviews:', place && place.reviews);
-            renderReviews(place, detailStatus, container);
-          });
-        });
-      }
+          const reviews = (places[0].reviews || [])
+            .filter(function(r) { return r.text && r.text.text && r.text.text.length > 5; })
+            .slice(0, 3);
 
-      function renderReviews(place, status, container) {
-        if (status !== google.maps.places.PlacesServiceStatus.OK) {
+          if (!reviews.length) {
+            container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
+            return;
+          }
+
+          container.innerHTML = reviews.map(function(r) {
+            const stars = '⭐'.repeat(Math.min(r.rating, 5));
+            const texto = r.text.text.length > 220 ? r.text.text.substring(0, 220) + '...' : r.text.text;
+            return '<blockquote class="testimonial">' +
+              '<div class="stars">' + stars + '</div>' +
+              '<p>"' + texto + '"</p>' +
+              '<footer>— ' + (r.authorAttribution ? r.authorAttribution.displayName : 'Cliente') + '</footer>' +
+              '</blockquote>';
+          }).join('');
+
+        } catch (e) {
+          console.error('Google Reviews:', e);
           container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
-          return;
         }
-
-        const reviews = (place.reviews || []).filter(function(r) { return r.text && r.text.length > 5; }).slice(0, 3);
-
-        if (!reviews.length) {
-          container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
-          return;
-        }
-
-        container.innerHTML = reviews.map(function(r) {
-          const stars = '⭐'.repeat(Math.min(r.rating, 5));
-          const texto = r.text.length > 220 ? r.text.substring(0, 220) + '...' : r.text;
-          return '<blockquote class="testimonial">' +
-            '<div class="stars">' + stars + '</div>' +
-            '<p>"' + texto + '"</p>' +
-            '<footer>— ' + r.author_name + '</footer>' +
-            '</blockquote>';
-        }).join('');
       }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGGQVJ7FPzHiza9WgbHTrIof95VELmmBM&libraries=places&callback=initGoogleReviews" async defer></script>
+    <script>
+      (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;a.onerror=()=>n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a);d[l]?f():d[q]=f}));d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        key: 'AIzaSyDGGQVJ7FPzHiza9WgbHTrIof95VELmmBM',
+        v: 'weekly',
+      });
+      window.addEventListener('load', initGoogleReviews);
+    </script>
   </body>
 </html>
