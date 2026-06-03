@@ -203,6 +203,15 @@ h1 {
 /* ── BTN LIGHT ── */
 .btn-light { background: rgba(255,255,255,0.15); color: #fff; border: 2px solid rgba(255,255,255,0.5); white-space: nowrap; }
 
+/* ── REVIEWS LOADING ── */
+.reviews-loading {
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+  grid-column: 1 / -1;
+}
+
 /* ── STARS ── */
 .stars { font-size: 14px; margin-bottom: 8px; }
 

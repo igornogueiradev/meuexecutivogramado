@@ -137,25 +137,11 @@
       <!-- DEPOIMENTOS -->
       <section id="testimonials" class="card">
         <h2>O que dizem nossos clientes</h2>
-        <p class="section-sub">Experiências reais de quem viajou com a Meu Executivo Gramado</p>
-        <div class="testimonials-grid">
-          <blockquote class="testimonial">
-            <div class="stars">⭐⭐⭐⭐⭐</div>
-            <p>"Serviço excelente! Motorista pontual, veículo impecável e atendimento muito atencioso. Super recomendo!"</p>
-            <footer>— Maria S., São Paulo</footer>
-          </blockquote>
-          <blockquote class="testimonial">
-            <div class="stars">⭐⭐⭐⭐⭐</div>
-            <p>"Passeio às vinícolas perfeito. Igor conhece muito bem a região e tornou a experiência ainda mais especial."</p>
-            <footer>— João P., Porto Alegre</footer>
-          </blockquote>
-          <blockquote class="testimonial">
-            <div class="stars">⭐⭐⭐⭐⭐</div>
-            <p>"Transfer do aeroporto tranquilo. Chegou antes do horário, ajudou com as malas e foi muito simpático."</p>
-            <footer>— Ana R., Curitiba</footer>
-          </blockquote>
+        <p class="section-sub">Avaliações reais do Google</p>
+        <div id="google-reviews" class="testimonials-grid">
+          <div class="reviews-loading">Carregando avaliações...</div>
         </div>
-        <p class="google-note">⭐ Veja mais avaliações no <a href="https://g.page/r/meuexecutivogramado/review" target="_blank">Google</a></p>
+        <p class="google-note">⭐ Veja todas as avaliações no <a href="https://share.google/8B7Civudz68UEOqfz" target="_blank">Google</a></p>
       </section>
 
       <!-- URGÊNCIA -->
@@ -273,5 +259,42 @@
     </a>
 
     <script type="module" src="/script.js"></script>
+    <script>
+      function initGoogleReviews() {
+        const mapDiv = document.createElement('div');
+        const map = new google.maps.Map(mapDiv);
+        const service = new google.maps.places.PlacesService(map);
+
+        service.findPlaceFromQuery({
+          query: 'Meu Executivo Gramado Gramado RS Brasil',
+          fields: ['place_id'],
+        }, function(results, status) {
+          if (status !== google.maps.places.PlacesServiceStatus.OK || !results.length) {
+            document.getElementById('google-reviews').innerHTML = '';
+            return;
+          }
+          service.getDetails({
+            placeId: results[0].place_id,
+            fields: ['reviews', 'rating', 'user_ratings_total'],
+          }, function(place, detailStatus) {
+            if (detailStatus !== google.maps.places.PlacesServiceStatus.OK || !place.reviews) {
+              document.getElementById('google-reviews').innerHTML = '';
+              return;
+            }
+            const reviews = place.reviews.slice(0, 3);
+            document.getElementById('google-reviews').innerHTML = reviews.map(function(r) {
+              const stars = '⭐'.repeat(r.rating);
+              const texto = r.text.length > 200 ? r.text.substring(0, 200) + '...' : r.text;
+              return '<blockquote class="testimonial">' +
+                '<div class="stars">' + stars + '</div>' +
+                '<p>"' + texto + '"</p>' +
+                '<footer>— ' + r.author_name + '</footer>' +
+                '</blockquote>';
+            }).join('');
+          });
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8aRcjuSQ6eersewGct9lvbuSSkO6roNg&libraries=places&callback=initGoogleReviews" async defer></script>
   </body>
 </html>
