@@ -1,4 +1,15 @@
-// Simple form handler that posts to /api/send
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyBZdRAPi_Ymypy5q0KyO31RupaETBAYelI',
+  authDomain: 'serraconecta-1737c.firebaseapp.com',
+  projectId: 'serraconecta-1737c',
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 const form = document.getElementById('leadForm');
 const formMsg = document.getElementById('formMsg');
 const waBtn = document.getElementById('whatsappForm');
@@ -6,42 +17,43 @@ const waBtn = document.getElementById('whatsappForm');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   formMsg.textContent = 'Enviando...';
-  const data = Object.fromEntries(new FormData(form).entries());
-  // Try to send via serverless function
+
+  const raw = Object.fromEntries(new FormData(form).entries());
+
+  const lead = {
+    nome: raw.name || '',
+    telefone: raw.whatsapp || '',
+    data_desejada: raw.date || '',
+    destino: [raw.origin, raw.destination].filter(Boolean).join(' → '),
+    mensagem: raw.message || '',
+    passageiros: raw.passengers || '',
+    status: 'novo',
+    created_at: new Date().toISOString(),
+  };
+
+  // Salva no Firestore (painel Meu Executivo Gramado)
   try {
-    const res = await fetch('/api/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    const json = await res.json();
-    if (json.success) {
-      formMsg.textContent = 'Mensagem enviada! Em breve entraremos em contato.';
-      form.reset();
-    } else {
-      formMsg.textContent =
-        'Não foi possível enviar pelo site. Abra o WhatsApp para enviar.';
-      // fallback: open whatsapp with prefilled message
-      openWhatsApp(data);
-    }
+    await addDoc(collection(db, 'leads'), lead);
   } catch (err) {
-    console.error(err);
-    formMsg.textContent = 'Erro no envio. Abra o WhatsApp para enviar.';
-    openWhatsApp(data);
+    console.error('Firestore:', err);
   }
+
+  // Abre WhatsApp com a mensagem
+  openWhatsApp(raw);
+  formMsg.textContent = 'Mensagem enviada! Em breve entraremos em contato. 🙏';
+  form.reset();
 });
 
 function openWhatsApp(data) {
   const phone = '5554992436396';
   const text = encodeURIComponent(
-    `Olá, meu nome é ${data.name || ''}. Gostaria de um orçamento. Origem: ${
+    `Olá, meu nome é ${data.name || ''}. Gostaria de um orçamento.\nOrigem: ${
       data.origin || ''
     }. Destino: ${data.destination || ''}. Data: ${data.date || ''}. Pessoas: ${
       data.passengers || ''
-    }. Mensagem: ${data.message || ''}. WhatsApp: ${data.whatsapp || ''}`
+    }.\nMensagem: ${data.message || ''}.\nWhatsApp: ${data.whatsapp || ''}`
   );
   const url = `https://wa.me/${phone}?text=${text}`;
-  waBtn.href = url;
+  if (waBtn) waBtn.href = url;
   window.open(url, '_blank');
 }
-
