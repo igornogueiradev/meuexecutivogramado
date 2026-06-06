@@ -148,24 +148,26 @@
       <section id="testimonials" class="card">
         <h2>O que dizem nossos clientes</h2>
         <p class="section-sub">Avaliações reais do Google</p>
-        <div class="testimonials-grid">
-          <blockquote class="testimonial">
-            <div class="stars">⭐⭐⭐⭐⭐</div>
-            <p>"Excelente atendimento. Igor é muito atencioso e gentil. Deu-nos boas dicas do que fazer no passeio e até tirou nossas fotos. Super indico!"</p>
-            <footer>— Antonia Clebia Soares Lima</footer>
-          </blockquote>
-          <blockquote class="testimonial">
-            <div class="stars">⭐⭐⭐⭐⭐</div>
-            <p>"Serviços de muita qualidade e pontualidade! O Igor pegou eu e minha família e ficou à disposição durante todo o passeio."</p>
-            <footer>— Thayna Dantas</footer>
-          </blockquote>
-          <blockquote class="testimonial">
-            <div class="stars">⭐⭐⭐⭐⭐</div>
-            <p>"Ótimo motorista, muito educado e pontual. Recomendo a todos que precisam de transfer na Serra Gaúcha!"</p>
-            <footer>— Remilton Francisco</footer>
-          </blockquote>
+        <div id="google-reviews" class="testimonials-grid">
+          <p class="reviews-loading">Carregando avaliações...</p>
         </div>
         <p class="google-note">⭐ Veja todas as avaliações no <a href="https://share.google/8B7Civudz68UEOqfz" target="_blank">Google</a></p>
+      </section>
+
+      <!-- INSTAGRAM -->
+      <section class="card instagram-card">
+        <div class="instagram-header">
+          <div>
+            <h2>Siga no Instagram</h2>
+            <p class="section-sub">Acompanhe nossos passeios e transfers</p>
+          </div>
+          <a href="https://instagram.com/meuexecutivogramado" target="_blank" class="btn btn-instagram">
+            📷 @meuexecutivogramado
+          </a>
+        </div>
+        <div id="instagram-feed" class="instagram-feed">
+          <!-- embed do último post vai aqui -->
+        </div>
       </section>
 
       <!-- URGÊNCIA -->
@@ -283,5 +285,29 @@
     </a>
 
     <script type="module" src="/script.js"></script>
+    <script>
+      async function carregarReviews() {
+        const container = document.getElementById('google-reviews');
+        try {
+          const res = await fetch('/api/reviews');
+          const data = await res.json();
+          if (!data.reviews?.length) {
+            container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
+            return;
+          }
+          container.innerHTML = data.reviews.map(function(r) {
+            const stars = '⭐'.repeat(Math.min(r.rating, 5));
+            return '<blockquote class="testimonial">' +
+              '<div class="stars">' + stars + '</div>' +
+              '<p>"' + r.text + '"</p>' +
+              '<footer>— ' + r.author + '</footer>' +
+              '</blockquote>';
+          }).join('');
+        } catch (e) {
+          container.innerHTML = '<p class="reviews-loading">Em breve nossas avaliações aparecerão aqui. ⭐</p>';
+        }
+      }
+      carregarReviews();
+    </script>
   </body>
 </html>

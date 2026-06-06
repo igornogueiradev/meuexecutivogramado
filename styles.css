@@ -654,6 +654,30 @@ h2 {
   box-shadow: 0 10px 28px rgba(37,211,102,0.5);
 }
 
+/* ── INSTAGRAM ── */
+.instagram-card { }
+
+.instagram-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.instagram-header h2 { margin-bottom: 2px; }
+
+.instagram-feed {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.instagram-feed iframe {
+  border-radius: 12px;
+  width: 100%;
+}
+
 /* ── MOBILE ── */
 @media (max-width: 720px) {
   h1 { font-size: 22px; }
