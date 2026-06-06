@@ -38,6 +38,15 @@ form.addEventListener('submit', async (e) => {
     console.error('Firestore:', err);
   }
 
+  // Rastreamento de conversão Google Ads
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'conversion', {
+      'send_to': 'AW-18213765427/aRJaCL62_bgcELOCgO1D',
+      'value': 1.0,
+      'currency': 'BRL'
+    });
+  }
+
   // Abre WhatsApp com a mensagem
   openWhatsApp(raw);
   formMsg.textContent = 'Mensagem enviada! Em breve entraremos em contato. 🙏';
