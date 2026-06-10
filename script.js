@@ -14,6 +14,20 @@ const form = document.getElementById('leadForm');
 const formMsg = document.getElementById('formMsg');
 const waBtn = document.getElementById('whatsappForm');
 
+function trackWhatsAppConversion() {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'conversion', {
+      'send_to': 'AW-18213765427/aRJaCL62_bgcELOCgO1D',
+      'value': 1.0,
+      'currency': 'BRL'
+    });
+  }
+}
+
+document.querySelectorAll('a[href*="wa.me"]').forEach(function(btn) {
+  btn.addEventListener('click', trackWhatsAppConversion);
+});
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   formMsg.textContent = 'Enviando...';
